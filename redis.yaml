@@ -1,0 +1,21 @@
+- name: redis
+  hosts: redis
+  become: yes
+  tasks:
+    - name: get redis repo
+      ansible.builtin.shell: dnf install https://rpms.remirepo.net/enterprise/remi-release-8.rpm -y
+    - name: Enable Redis 6.2 from package streams
+      ansible.builtin.shell: dnf module enable redis:remi-6.2 -y
+    - name: install redis
+      ansible.builtin.shell: dnf install redis -y
+    - name: allow remote conncections
+      ansible.builtin.replace:
+        path: /etc/redis.conf
+        path: /etc/redis/redis.conf
+        regexp: '127.0.0.1'
+        replace: '0.0.0.0'
+    - name: start and enable redis
+      ansible.builtin.service:
+        name: redis
+        state: started
+        enabled: yes
