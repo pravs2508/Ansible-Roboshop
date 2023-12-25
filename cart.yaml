@@ -47,8 +47,8 @@
   # let's start after the data is loaded
 
   
-  - name: start and enable user
+  - name: start and enable cart
     ansible.builtin.service:
-      name: user
+      name: cart
       state: restarted
       enabled: yes
