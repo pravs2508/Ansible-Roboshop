@@ -14,6 +14,11 @@
     ansible.builtin.user:
       name: roboshop
 
+  - name: Recursively remove app directory
+    ansible.builtin.file:
+      path: /app
+      state: absent
+
   - name: create app directory
     ansible.builtin.file:
       path: /app
@@ -56,9 +61,17 @@
       name: mongodb-org-shell
       state: present
 
+  - name: get the users count
+    ansible.builtin.command:  mongo --host mongodb.devoperations.us --quiet --eval 'db = db.getSiblingDB("users"); db.users.count()'
+    register: user_count
+
+  # - name: print the count
+  #   ansible.builtin.debug:
+  #     msg: "product count: {{user_count}}"
+
   - name: load user data
     ansible.builtin.command: mongo --host mongodb.devoperations.us < /app/schema/user.js
-    when: product_count.stdout == 0
+    when: user_count.stdout == "0" # keep double quotes
 
   - name: start and enable user
     ansible.builtin.service:
