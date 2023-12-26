@@ -30,9 +30,9 @@
     args:
       chdir: /app 
   - name: change shipping jar file
-    ansible.builtin.command: mv /target/shipping-1.0.jar shipping.jar
-    args:
-      chdir: /app/target/
+    ansible.builtin.command: mv /app/target/shipping-1.0.jar /app/target/shipping.jar
+    #args:
+      #chdir: /app/target/
   - name: Copy shipping service
     ansible.builtin.copy:
       src: shipping.service
