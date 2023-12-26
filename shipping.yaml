@@ -26,9 +26,11 @@
       remote_src: yes
 
   - name: Install dependencies
-    ansible.builtin.command: mvn clean package & mv target/shipping-1.0.jar shipping.jar
+    ansible.builtin.command: mvn clean package 
     args:
       chdir: /app 
+  - name: change shipping jar file
+    ansible.builtin.command: mv target/shipping-1.0.jar shipping.jar
   - name: Copy shipping service
     ansible.builtin.copy:
       src: shipping.service
